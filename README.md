@@ -90,10 +90,40 @@ val2017 523/5,000; train2017 12,620/118,287) ) and is right-sized for **evaluati
 training. The training-scale source is self-generated synthetic ANNY renders, which the rest
 of this repo builds.
 
+## VRM avatars and mask checks
+
+A pilot render of VRM avatars (COCO instance masks) and two ways to judge a person mask.
+
+| tool | how to run it |
+|---|---|
+| `vrm_fetch.py`, `vrm_load.py`, `vrm_render.py` | `pixi run vrm-pilot`: fetches the CC0 avatars in `vrm_models.tsv`, checks that the aux pass leaves RGB and masks unchanged (`vrm-check-aux`), renders 300 images with `--aux`, then verifies the COCO file and writes a contact sheet |
+| `depth_agreement.py` | MoGe-3 depth agreement, the mask acceptance check. `infer` needs the Windows env `C:\Users\ernest.lee\AppData\Local\moge3\pixi.toml`; `score` / `compare` / `sheet` run in that env too: `pixi run --manifest-path C:/Users/ernest.lee/AppData/Local/moge3/pixi.toml python depth_agreement.py <subcommand>` |
+| `matte_refine.py` | tightens RF-DETR person masks with a BiRefNet_HR alpha matte, scored by `depth_agreement`: `pixi run --manifest-path C:/Users/ernest.lee/AppData/Local/matting-hr/pixi.toml python matte_refine.py` |
+| `score_masks.py` | EditScore as a mask grader (parked, see below): `pixi run -e editscore python score_masks.py --rfdetr ... --frames ... --frame-dir ... --out data/score_masks/vrchat23 --sheet sheet.png` |
+
 ## Open work
 
 Tracked as issues, not prose — see this repo's issue list. Critical path is **#1**
 (100STYLE bind-orientation correction) → poses → scenes → rung 0 of the render ladder.
+
+## Parked
+
+Recorded so it is not lost, and not scheduled.
+
+- Shelved 2026-09-27: the ~5k-image VRM render corpus with a train/val split by avatar.
+  A pilot of 300 images from 25 CC0 avatars exists (`pixi run vrm-pilot`). Scaling it is
+  parked because no vehicle needs avatar-person detection; faces are RFD 2262's Car.
+  Unpark when a vehicle needs it.
+- Shelved 2026-09-27: EditScore as a mask judge (`score_masks.py`). On 23 VRChat frames
+  it does not track mask quality: its best pick agrees with the MoGe-3 depth check on 6 of
+  23, and `--fast` is 12x faster but reaches only Spearman 0.42–0.52 against the full
+  mode. Acceptance uses `depth_agreement.py` instead. Calibration on the pilot renders
+  (mode a, AUC against IoU) has not been run. Unpark as part of RFD 2262's "grade that
+  teaches" (a compact retrained EditScore), not before.
+- Shelved 2026-09-27: the pilot renders' known gaps. Pose randomisation is light (many
+  avatars near T-pose); alpha-blended materials are refused; renders are not bit-exact,
+  because single-thread drjit deadlocks with the MToon integrator; Mitsuba CUDA is
+  unavailable under WSL (OptiX). Unpark with the VRM render corpus above.
 
 ## Licence
 
