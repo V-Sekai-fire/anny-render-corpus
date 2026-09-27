@@ -31,3 +31,10 @@ build/
 # 1.3 GB of JPEG-in-parquet that the fetch list already pins by image_id and sha256.
 coco_images_train2017/
 maskscore_rung_0.parquet
+
+# Fetched and rendered by vrm_fetch.py / vrm_render.py; pinned by sha256 in vrm_models.tsv.
+data/vrm/
+data/vrm_tex/
+data/granite/
+data/vrm_render/
+data/backgrounds/

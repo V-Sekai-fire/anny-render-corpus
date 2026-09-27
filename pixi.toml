@@ -48,6 +48,8 @@ pyyaml = ">=6.0"
 # Pinned exactly. The renderer is a measuring instrument, and an instrument that changes
 # version between two runs has made the two runs incomparable.
 mitsuba = "==3.9.1"
+pygltflib = ">=1.16.5, <2"
+pycocotools = ">=2.0.11, <3"
 
 # DR.JIT FINDS ITS OWN LLVM ON WINDOWS AND LINUX AND NOT ON MACOS, so the path is declared
 # rather than left to a person to export. `llvm_ad_rgb` is the SHIPPING variant -- the one the
@@ -63,10 +65,18 @@ mitsuba = "==3.9.1"
 [target.osx-arm64.activation.env]
 DRJIT_LIBLLVM_PATH = "$CONDA_PREFIX/lib/libLLVM.20.1.dylib"
 
+# Linux desks without a system libLLVM.so otherwise fail `set_variant("llvm_ad_rgb")` the same way.
+[target.linux-64.activation.env]
+DRJIT_LIBLLVM_PATH = "$CONDA_PREFIX/lib/libLLVM.so.20.1"
+
 [tasks]
 # The check the Blender blocklist entry demands of any replacement, as a task rather than a
 # paragraph somebody has to remember to run.
 render-view = "python render_view.py"
+vrm-fetch = "python vrm_fetch.py"
+vrm-check-aux = "python vrm_render.py --check-aux"
+vrm-render = { cmd = "python vrm_render.py --count 300 --aux", depends-on = ["vrm-fetch", "vrm-check-aux"] }
+vrm-pilot = { cmd = "python vrm_render.py --verify && python vrm_render.py --sheet", depends-on = ["vrm-render"] }
 
 # THE RESTYLE ENVIRONMENT, SEPARATE FROM THE RENDER ONE ON PURPOSE.
 #
@@ -130,6 +140,9 @@ tts = { features = ["tts"], no-default-feature = true }
 usd = { features = ["usd"], no-default-feature = true }
 
 [target.osx-arm64.dependencies]
+libllvm20 = ">=20.1.8,<21"
+
+[target.linux-64.dependencies]
 libllvm20 = ">=20.1.8,<21"
 
 # OMNIGEN2, AND IT GETS ITS OWN ENVIRONMENT BECAUSE UPSTREAM PINS AGAINST THE OTHER ONE.
