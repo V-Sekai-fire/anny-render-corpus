@@ -15,6 +15,9 @@ card_preview.png
 __pycache__/
 *.pyc
 
+# Local pixi environment cache, materialised by `pixi run`; a build product, never tracked.
+.pixi/
+
 # RENDERED FRAMES ARE IGNORED WHILE THE QUESTION IS OPEN, NOT BECAUSE IT IS SETTLED.
 # See CORPUS_DESIGN.md, "Where the rendered frames go". Ignoring them keeps the working
 # tree usable meanwhile; it is not the answer.
