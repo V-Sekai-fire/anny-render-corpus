@@ -265,7 +265,7 @@ numpy = ">=2.0"
 
 [feature.corpus.tasks]
 # The schema's own summary: relation and foreign-key counts, read out of the definitions
-# rather than restated. README numbers are checked against this.
+# rather than restated. CLAIMS.md numbers are checked against this.
 schema = "python anny_render_schema.py"
 # Whole-corpus gate. Takes a corpus root.
 validate = "python anny_render_schema.py"

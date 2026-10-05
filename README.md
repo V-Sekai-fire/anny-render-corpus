@@ -4,7 +4,7 @@ The ANNY render corpus pipeline: ETNF schema, identity sampling, the canonical r
 
 ## What it is for
 
-It makes labelled training frames by rendering ANNY bodies, so the labels are true by construction rather than annotated. Every stage builds its body from the one rigged model in `anny_rig.py`, and the audits each carry a negative control that proves they can fail. It also holds the licence-filtered COCO person manifests; the val2017 manifest is the blinded holdout and is never trained on, tuned against or generated from. The figures the code must keep true are tagged in `CLAIMS.md`.
+It makes labelled training frames by rendering ANNY bodies, so the labels are true by construction rather than annotated. Every stage builds its body from the one rigged model in `anny_rig.py`, and the audits each carry a negative control that proves they can fail. It also holds the licence-filtered COCO person manifests; the val2017 manifest is the blinded holdout and is never trained on, tuned against or generated from. It also holds generated-synthetic tooling (image restyle and edit, edit scoring, voice cloning and speech recognition) in environments of their own, whose outputs are stored and manifested apart from the constructed renders. The figures the code must keep true are tagged in `CLAIMS.md`.
 
 ## Build and run
 
@@ -12,7 +12,7 @@ The environments are pinned in `pixi.toml`.
 
 ```sh
 pixi run -e anny preflight
-pixi run render-view
+pixi run -e corpus schema
 ```
 
 ## Licence
