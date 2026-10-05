@@ -15,7 +15,7 @@ and this script re-derives each one from the live code and compares. Drift is a 
 failure, not a discovery six months later. That is the whole mechanism: being wrong makes
 the documentation fail loudly, which is what makes it worth trusting when it passes.
 
-Usage:  python check_readme_claims.py [README.md]
+Usage:  python check_readme_claims.py [CLAIMS.md]
 Exit code is non-zero if any claim has drifted, so it can gate CI.
 
 A claim with no measurement function registered is reported as UNVERIFIED rather than
@@ -232,20 +232,22 @@ MEASUREMENTS = {
     "bvh_clip_count": measure_bvh_clip_count,
 }
 
+CLAIMS_FILE = "CLAIMS.md"
+
 CLAIM_RE = re.compile(r"<!--\s*claim:(\w+)=([-\d.]+)(?:\s+tol=([\d.]+))?\s*-->")
 
 
 def main(path=None):
-    path = path or (sys.argv[1] if len(sys.argv) > 1 else "README.md")
+    path = path or (sys.argv[1] if len(sys.argv) > 1 else CLAIMS_FILE)
     with open(path, encoding="utf-8") as fh:
         text = fh.read()
 
     claims = CLAIM_RE.findall(text)
     if not claims:
-        print("no tagged claims found in %s -- README numbers are unverifiable" % path)
+        print("no tagged claims found in %s -- its numbers are unverifiable" % path)
         return 1
 
-    print("%-24s %12s %12s %10s  %s" % ("claim", "README", "measured", "tol", "verdict"))
+    print("%-24s %12s %12s %10s  %s" % ("claim", "stated", "measured", "tol", "verdict"))
     print("-" * 76)
     bad = 0
     cached, stale = [], []
@@ -308,9 +310,9 @@ def main(path=None):
         print("is never written by this script; someone recorded it after measuring.")
         print()
     if bad:
-        print("%d claim(s) drifted or unverified -- the README is making statements the"
+        print("%d claim(s) drifted or unverified -- CLAIMS.md is making statements the"
               % bad)
-        print("code no longer supports. Fix the README or fix the code; do not ignore it.")
+        print("code no longer supports. Fix CLAIMS.md or fix the code; do not ignore it.")
     else:
         print("all %d claims re-derived from live code and still hold." % len(claims))
     return 1 if bad else 0
@@ -432,7 +434,7 @@ def self_test():
     before = open(path, "rb").read() if os.path.exists(path) else None
     with contextlib.redirect_stdout(io.StringIO()):
         try:
-            main(os.path.join(here, "README.md"))
+            main(os.path.join(here, CLAIMS_FILE))
         except SystemExit:
             pass
     after = open(path, "rb").read() if os.path.exists(path) else None
@@ -448,7 +450,7 @@ def self_test():
         out = io.StringIO()
         with contextlib.redirect_stdout(out):
             try:
-                main(os.path.join(here, "README.md"))
+                main(os.path.join(here, CLAIMS_FILE))
             except SystemExit:
                 pass
         text = out.getvalue()

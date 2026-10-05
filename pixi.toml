@@ -265,7 +265,7 @@ numpy = ">=2.0"
 
 [feature.corpus.tasks]
 # The schema's own summary: relation and foreign-key counts, read out of the definitions
-# rather than restated. README numbers are checked against this.
+# rather than restated. CLAIMS.md numbers are checked against this.
 schema = "python anny_render_schema.py"
 # Whole-corpus gate. Takes a corpus root.
 validate = "python anny_render_schema.py"
@@ -289,7 +289,7 @@ coco-download = "python download_coco_images.py"
 # already makes for the renderer.
 #
 # It exists because nothing in this checkout could import `anny` at all. That is why nine of
-# the eleven tagged claims in README.md report ModuleNotFoundError rather than a number, and
+# the eleven tagged claims in CLAIMS.md report ModuleNotFoundError rather than a number, and
 # why `interface_audit.py`'s expression check cannot run: it reads
 # `model.facial_action_labels` and reports UNCHECKED when it cannot.
 # THE USD ENVIRONMENT, AND IT EXISTS BECAUSE TWO GATES COULD NOT RUN.
