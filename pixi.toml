@@ -289,7 +289,7 @@ coco-download = "python download_coco_images.py"
 # already makes for the renderer.
 #
 # It exists because nothing in this checkout could import `anny` at all. That is why nine of
-# the eleven tagged claims in README.md report ModuleNotFoundError rather than a number, and
+# the eleven tagged claims in CLAIMS.md report ModuleNotFoundError rather than a number, and
 # why `interface_audit.py`'s expression check cannot run: it reads
 # `model.facial_action_labels` and reports UNCHECKED when it cannot.
 # THE USD ENVIRONMENT, AND IT EXISTS BECAUSE TWO GATES COULD NOT RUN.

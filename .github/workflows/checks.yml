@@ -74,7 +74,7 @@ jobs:
       - run: pixi run -e anny preflight
       - run: pixi run -e anny preflight-red-green
 
-  # THE README'S OWN NUMBERS, WHICH IS THE CLAIM THIS REPOSITORY OPENS WITH.
+  # THE TAGGED NUMBERS IN CLAIMS.md.
   #
   # Gating on the exit code, which it could not do until now. This job was
   # `continue-on-error` across two environments, because the schema pair needed `corpus` and
